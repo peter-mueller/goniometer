@@ -24,8 +24,8 @@
         var ctx = canvas.getContext('2d');
 
         function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            canvas.width = document.body.clientWidth;
+            canvas.height = document.body.clientHeight;
             LISSAJOUS_SCALE = Math.min(canvas.width, canvas.height) * 0.714;
             ctx.translate(canvas.width / 2, canvas.height / 2);
         }
