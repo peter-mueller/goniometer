@@ -27,7 +27,6 @@
             canvas.width = document.body.clientWidth;
             canvas.height = document.body.clientHeight;
             LISSAJOUS_SCALE = Math.min(canvas.width, canvas.height);
-            LISSAJOUS_SCALE *= window.devicePixelRatio || 1
             ctx.translate(canvas.width / 2, canvas.height / 2);
         }
         window.addEventListener('resize', resize, false);
@@ -58,6 +57,7 @@
 
                 processor.onaudioprocess = function (e) {
                     var buffer = e.inputBuffer;
+                    
                     const channels = buffer.numberOfChannels;
                     // Do something with the data, e.g. convert it to WAV
 
@@ -67,11 +67,15 @@
                     }
                     var maxValue = 0;
                     var amplifyAmount = 0;
-                    for (var i = 0; i < buffer.length; i+=buffer.length/10) {
-                        maxValue = Math.max(buffer.getChannelData(0)[i], maxValue);
+                    for (var i = 0; i < buffer.length; i+=buffer.length/10 -1) {
+                        const value = buffer.getChannelData(0)[i];
+                        if (!value) {
+                            continue;
+                        }
+                        maxValue = Math.max(value, maxValue);
                     }
-                    if (maxValue < 0.71) { // would be hard to see if so small
-                        amplifyAmount = 0.71 - maxValue;
+                    if (maxValue < 0.01) { // would be hard to see if so small
+                        amplifyAmount = 0.01 - maxValue;
                     }  
 
                     ctx.fillStyle = "white"
@@ -94,7 +98,7 @@
                         }
                         else {
                             y = buffer.getChannelData(1)[i]
-                            y += amplifyAmount;
+                            y += Math.sign(y) * amplifyAmount;
                             y *= LISSAJOUS_SCALE;
                         }
                         lastBuffer = buffer;
