@@ -67,8 +67,8 @@
                     }
                     var maxValue = 0;
                     var amplifyAmount = 0;
-                    for (var i = 0; i < buffer.length; i+=buffer.length/6) {
-                        maxValue = Math.max(buffer.getChannelData(0), maxValue);
+                    for (var i = 0; i < buffer.length; i+=buffer.length/10) {
+                        maxValue = Math.max(buffer.getChannelData(0)[i], maxValue);
                     }
                     if (maxValue < 0.71) { // would be hard to see if so small
                         amplifyAmount = 0.71 - maxValue;
@@ -83,13 +83,13 @@
                     ctx.beginPath()
                     for (var i = 0; i < buffer.length; i += 1) {
                         var x = buffer.getChannelData(0)[i]
-                        x += amplifyAmount;
+                        x += Math.sign(x) * amplifyAmount;
                         x *= LISSAJOUS_SCALE;
                         var y = 0;
                         if (channels == 1) {
                             // delay
                             y = (i - DELAY >= 0) ? buffer.getChannelData(0)[i - DELAY] : lastBuffer.getChannelData(0)[buffer.length + i - DELAY];
-                            y += amplifyAmount;
+                            y += Math.sign(y) * amplifyAmount;
                             y *= LISSAJOUS_SCALE;
                         }
                         else {
