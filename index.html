@@ -26,7 +26,7 @@
         function resize() {
             canvas.width = document.body.clientWidth;
             canvas.height = document.body.clientHeight;
-            LISSAJOUS_SCALE = Math.min(canvas.width, canvas.height) * 0.714;
+            LISSAJOUS_SCALE = Math.min(canvas.width, canvas.height);
             LISSAJOUS_SCALE *= window.devicePixelRatio || 1
             ctx.translate(canvas.width / 2, canvas.height / 2);
         }
