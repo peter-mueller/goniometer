@@ -62,8 +62,8 @@
                     for (var i = 0; i < buffer.length; i+=buffer.length/6) {
                         maxValue = Math.max(buffer.getChannelData(0), maxValue);
                     }
-                    if (maxValue < 0.3) { // would be hard to see if so small
-                        amplifyAmount = 0.3 - maxValue;
+                    if (maxValue < 0.5) { // would be hard to see if so small
+                        amplifyAmount = 0.5 - maxValue;
                     }  
 
                     ctx.fillStyle = "white"
