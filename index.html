@@ -42,7 +42,7 @@
                 biquadFilter.frequency.setValueAtTime(440 * 2 * 2, 0);
                 biquadFilter.gain.setValueAtTime(-20, 0);
 
-                const processor = context.createScriptProcessor(1024, 2, 1);
+                const processor = context.createScriptProcessor(1024, 1, 1);
 
                 source.connect(biquadFilter);
                 biquadFilter.connect(processor);
