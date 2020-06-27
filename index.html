@@ -57,6 +57,14 @@
                     if (!lastBuffer) {
                         lastBuffer = buffer;
                     }
+                    var maxValue = 0;
+                    var amplifyAmount = 0;
+                    for (var i = 0; i < buffer.length; i+=buffer.length/6) {
+                        maxValue = Math.max(buffer.getChannelData(0), maxValue);
+                    }
+                    if (maxValue < 0.3) { // would be hard to see if so small
+                        amplifyAmount = 0.3 - maxValue;
+                    }  
 
                     ctx.fillStyle = "white"
                     ctx.fillRect(-canvas.width, -canvas.height, canvas.width * 2, canvas.height * 2);
@@ -66,15 +74,20 @@
                     ctx.shadowColor = "black";
                     ctx.beginPath()
                     for (var i = 0; i < buffer.length; i += 1) {
-                        var x = buffer.getChannelData(0)[i] * LISSAJOUS_SCALE;
+                        var x = buffer.getChannelData(0)[i]
+                        x += amplifyAmount;
+                        x *= LISSAJOUS_SCALE;
                         var y = 0;
                         if (channels == 1) {
                             // delay
                             y = (i - DELAY >= 0) ? buffer.getChannelData(0)[i - DELAY] : lastBuffer.getChannelData(0)[buffer.length + i - DELAY];
+                            y += amplifyAmount;
                             y *= LISSAJOUS_SCALE;
                         }
                         else {
-                            y = buffer.getChannelData(1)[i] * LISSAJOUS_SCALE;
+                            y = buffer.getChannelData(1)[i]
+                            y += amplifyAmount;
+                            y *= LISSAJOUS_SCALE;
                         }
                         lastBuffer = buffer;
 
